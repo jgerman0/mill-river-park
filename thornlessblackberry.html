@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Thornless Blackberry</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Lexend:wght@400;700;900&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans', sans-serif;
+  margin: 0;
+  background: #f5f3ee;
+}
+
+#sticky-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  height: 54px;
+  background: #255925;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.28);
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+#sticky-nav .sticky-brand {
+  font-size: 0.95rem; font-weight: 700; letter-spacing: 0.06em; color: #ffffff; white-space: nowrap;
+}
+#sticky-nav .sticky-links { display: flex; gap: 2.5rem; }
+#sticky-nav .sticky-links a {
+  color: #ffffff; text-decoration: none; font-size: 0.9rem; letter-spacing: 0.07em; transition: color 0.2s;
+}
+#sticky-nav .sticky-links a:hover { color: #e8dfc8; }
+
+#page-body {
+  display: flex; align-items: flex-start; padding: 2.5rem 2.5rem 4rem; gap: 2rem; max-width: 1400px; margin: 0 auto;
+}
+
+.page-wrapper {
+  max-width: 999px; margin: 0 auto; background: #fff;
+  border: 1px solid #d8d4cc; border-radius: 4px; overflow: hidden;
+}
+.page-header { padding: 72px 24px 16px; border-bottom: 1px solid #d8d4cc; }
+.page-body { display: flex; }
+.plant-title {
+  font-family: 'Times New Roman', Times, serif; font-size: 1.75rem; font-weight: 700;
+  color: #1a5c1a; line-height: 1.2; margin-bottom: 12px;
+}
+.image-column {
+  width: 260px; flex-shrink: 0; border-right: 1px solid #d8d4cc;
+  padding: 18px 14px; display: flex; flex-direction: column; gap: 8px;
+}
+.main-img-container { width: 100%; aspect-ratio: 1 / 1; background: #f7f9f4; overflow: hidden; }
+.main-img-container img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.thumb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+.thumb-item { display: flex; flex-direction: column; gap: 3px; }
+.thumb-slot {
+  width: 100%; aspect-ratio: 1 / 1; border: 2px solid transparent;
+    overflow: hidden; background: #f7f9f4;
+}
+.thumb-slot.active { border-color: #1a5c1a; }
+.thumb-slot img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.18s ease; }
+.thumb-slot:hover img {   }
+.thumb-label {
+  font-size: 0.58rem; text-align: center; color: #555;
+  font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.info-column { flex: 1; min-width: 0; padding: 18px 20px 24px; overflow: hidden; }
+.badges { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+.badge-svg { width: 82px; height: 82px; flex-shrink: 0; }
+.tabs {
+  display: flex; border-bottom: 2px solid #ccc;
+  flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  flex-shrink: 0; padding: 12px 18px;
+  font-family: 'Lexend', sans-serif; font-size: 0.85rem; font-weight: 700;
+  letter-spacing: 0.05em; text-transform: uppercase; color: #555; cursor: pointer;
+  border: 1px solid #ccc; border-bottom: none; background: #f2efe9;
+  margin-right: -1px; position: relative; top: 2px; transition: background 0.15s;
+}
+.tab:hover { background: #e8e4dd; }
+.tab.active { background: #fff; color: #1a5c1a; border-bottom: 2px solid #fff; z-index: 1; }
+.tab-content { border: 1px solid #ccc; border-top: none; padding: 18px 16px 22px; }
+.panel { display: none; }
+.panel.active { display: block; }
+.common-name {
+  font-family: 'Times New Roman', Times, serif; font-size: 1.05rem;
+  font-weight: 700; color: #1a5c1a; margin-bottom: 2px;
+}
+.scientific-name {
+  font-family: 'Times New Roman', Times, serif; font-style: italic;
+  color: #2e7d2e; font-size: 0.90rem; margin-bottom: 14px;
+}
+.description-text { font-size: 0.88rem; color: #333; line-height: 1.7; margin-bottom: 20px; }
+.benefits-title {
+  font-family: 'Times New Roman', Times, serif; font-size: 1.0rem;
+  font-weight: 700; color: #1a5c1a; margin-bottom: 9px;
+}
+.benefits-list { list-style: disc; padding-left: 20px; font-size: 0.87rem; color: #333; line-height: 1.8; }
+@media (max-width: 560px) {
+  .page-body { flex-direction: column; }
+  .image-column { width: 100%; border-right: none; border-bottom: 1px solid #d8d4cc; }
+}
+</style>
+</head>
+<body>
+
+<nav id="sticky-nav">
+  <span class="sticky-brand">Mill River Park</span>
+  <div class="sticky-links">
+    <a href="homepage.html">Home</a>
+    <a href="pollinatorpage.html">Pollinators</a>
+    <a href="birdpage.html">Birds</a>
+    <a href="peoplepage.html">People</a>
+<a href="resources.html">Resources</a>
+  </div>
+</nav>
+
+<div class="page-wrapper">
+  
+  <div class="page-header">
+    <h1 class="plant-title">Thornless Blackberry</h1>
+  </div>
+
+  <div class="page-body">
+
+    <div class="image-column">
+      <div class="main-img-container">
+        <img id="main-image-display"
+             src="https://www.starkbros.com/images/dynamic/7584.jpg"
+             alt="Thornless Blackberry" />
+      </div>
+
+      <div class="thumb-grid">
+        <div class="thumb-item">
+          <div class="thumb-slot active"
+               onclick="swapImage(this,'https://d55v7rs15ikf5.cloudfront.net/optimized/3X/3/9/39df903de0780b90a36297b54c184cee56424b77_2_768x1024.jpeg')">
+            <img src="https://d55v7rs15ikf5.cloudfront.net/optimized/3X/3/9/39df903de0780b90a36297b54c184cee56424b77_2_768x1024.jpeg" alt="Seedling – Spring" />
+          </div>
+          <div class="thumb-label">Seedling</div>
+        </div>
+
+        <div class="thumb-item">
+          <div class="thumb-slot"
+               onclick="swapImage(this,'https://www.wotncr.org/wildflowers/photos/rubus_pensilvanicus_2.jpg')">
+            <img src="https://www.wotncr.org/wildflowers/photos/rubus_pensilvanicus_2.jpg" alt="In Bloom – Summer" />
+          </div>
+          <div class="thumb-label">In Bloom</div>
+        </div>
+
+        <div class="thumb-item">
+          <div class="thumb-slot"
+               onclick="swapImage(this,'https://citrusespalma.cdn.shoprenter.hu/custom/citrusespalma/image/data/gyumolcstermo-novenyek/szeder/tusketlen-fekete-szeder-rubus-fruticosus-loch-ness.jpg.webp?lastmod=1745400861.1596026089')">
+            <img src="https://citrusespalma.cdn.shoprenter.hu/custom/citrusespalma/image/data/gyumolcstermo-novenyek/szeder/tusketlen-fekete-szeder-rubus-fruticosus-loch-ness.jpg.webp?lastmod=1745400861.1596026089" alt="Harvest – Fall" />
+          </div>
+          <div class="thumb-label">Harvest</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-column">
+
+      <div class="badges">
+
+        <svg class="badge-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Butterfly">
+          <circle cx="50" cy="50" r="49" fill="#F5B800"/>
+          <circle cx="50" cy="50" r="45" fill="none" stroke="#C85000" stroke-width="3.5"/>
+          <ellipse cx="50" cy="50" rx="3.5" ry="14" fill="#C85000"/>
+          <line x1="50" y1="37" x2="42" y2="26" stroke="#C85000" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="41" cy="24" r="2.5" fill="#C85000"/>
+          <line x1="50" y1="37" x2="58" y2="26" stroke="#C85000" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="59" cy="24" r="2.5" fill="#C85000"/>
+          <path d="M 47,43 Q 20,28 22,48 Q 23,60 46,54 Z" fill="#C85000"/>
+          <path d="M 53,43 Q 80,28 78,48 Q 77,60 54,54 Z" fill="#C85000"/>
+          <path d="M 47,55 Q 22,58 26,70 Q 30,78 47,66 Z" fill="#C85000"/>
+          <path d="M 53,55 Q 78,58 74,70 Q 70,78 53,66 Z" fill="#C85000"/>
+          <defs><path id="arcBF" d="M 14,65 A 38,38 0 0,0 86,65"/></defs>
+          <text font-family="'Lexend', Arial, sans-serif" font-size="10.5" font-weight="900" fill="#1a3e8c" letter-spacing="0.5">
+            <textPath href="#arcBF" startOffset="50%" text-anchor="middle">BUTTERFLY</textPath>
+          </text>
+        </svg>
+
+        <svg class="badge-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Full Sun">
+          <circle cx="50" cy="50" r="49" fill="#F5B800"/>
+          <circle cx="50" cy="50" r="45" fill="none" stroke="#C85000" stroke-width="3.5"/>
+          <circle cx="50" cy="47" r="23" fill="#C85000" opacity="0.25"/>
+          <g fill="#C85000">
+            <polygon points="50,14 47,24 53,24"/>
+            <polygon points="68,20 60,27 65,31"/>
+            <polygon points="82,47 72,44 72,50"/>
+            <polygon points="68,74 61,63 65,59"/>
+            <polygon points="50,80 53,70 47,70"/>
+            <polygon points="32,74 39,63 35,59"/>
+            <polygon points="18,47 28,50 28,44"/>
+            <polygon points="32,20 40,27 35,31"/>
+            <polygon points="62,16 57,24 60,26"/>
+            <polygon points="78,33 69,37 71,41"/>
+            <polygon points="78,61 69,57 71,53"/>
+            <polygon points="62,78 57,70 60,68"/>
+            <polygon points="38,78 43,70 40,68"/>
+            <polygon points="22,61 31,57 29,53"/>
+            <polygon points="22,33 31,37 29,41"/>
+            <polygon points="38,16 43,24 40,26"/>
+          </g>
+          <circle cx="50" cy="47" r="16" fill="#C85000"/>
+          <circle cx="50" cy="47" r="10" fill="#E8950A"/>
+          <circle cx="45" cy="43" r="4" fill="#F5B800" opacity="0.5"/>
+          <defs><path id="arcFS" d="M 14,65 A 38,38 0 0,0 86,65"/></defs>
+          <text font-family="'Lexend', Arial, sans-serif" font-size="10.5" font-weight="900" fill="#1a3e8c" letter-spacing="0.5">
+            <textPath href="#arcFS" startOffset="50%" text-anchor="middle">FULL SUN</textPath>
+          </text>
+        </svg>
+
+        <svg class="badge-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pollinator">
+          <circle cx="50" cy="50" r="49" fill="#F5B800"/>
+          <circle cx="50" cy="50" r="45" fill="none" stroke="#C85000" stroke-width="3.5"/>
+          <ellipse cx="50" cy="52" rx="10" ry="14" fill="#C85000"/>
+          <circle cx="50" cy="35" r="8" fill="#C85000"/>
+          <rect x="40" y="47" width="20" height="4" rx="1" fill="#F5B800"/>
+          <rect x="40" y="55" width="20" height="4" rx="1" fill="#F5B800"/>
+          <ellipse cx="33" cy="43" rx="10" ry="6" fill="#C85000" transform="rotate(-25 33 43)" opacity="0.9"/>
+          <ellipse cx="67" cy="43" rx="10" ry="6" fill="#C85000" transform="rotate(25 67 43)" opacity="0.9"/>
+          <line x1="46" y1="28" x2="38" y2="18" stroke="#C85000" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="37" cy="16" r="2.5" fill="#C85000"/>
+          <line x1="54" y1="28" x2="62" y2="18" stroke="#C85000" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="63" cy="16" r="2.5" fill="#C85000"/>
+          <polygon points="50,66 46,74 54,74" fill="#C85000"/>
+          <defs><path id="arcPL" d="M 14,65 A 38,38 0 0,0 86,65"/></defs>
+          <text font-family="'Lexend', Arial, sans-serif" font-size="10.5" font-weight="900" fill="#1a3e8c" letter-spacing="0.5">
+            <textPath href="#arcPL" startOffset="50%" text-anchor="middle">POLLINATOR</textPath>
+          </text>
+        </svg>
+
+      </div>
+
+      <!-- TABS -->
+      <div class="tabs">
+        <div class="tab active" data-panel="description">HOW DOES IT GROW?</div>
+        <div class="tab" data-panel="native">WHERE DOES IT LIVE?</div>
+        <div class="tab" data-panel="facts">WHO USES IT?</div>
+      </div>
+
+      <div class="tab-content">
+        
+        <div class="panel active" id="description">
+  <p class="common-name">Thornless Blackberry</p>
+  <p class="scientific-name">Rubus fruticosus (Thornless Cultivars)</p>
+  <p class="description-text">
+    Thornless blackberries are perennial shrubs known for their smooth, easy-to-handle canes. They begin as small transplants or root cuttings, growing into vigorous arching canes with dark green, serrated leaves. In late spring, they produce delicate white or pink blossoms that attract pollinators. These are followed by clusters of green berries that deepen into a glossy, midnight black as they ripen. Unlike wild varieties, these cultivars offer a painless harvest without the sharp prickles.
+  </p>
+</div>
+
+<div class="panel" id="native">
+  <p class="benefits-title">Origins and History</p>
+  <p class="description-text">
+    While blackberries grow wild across much of the Northern Hemisphere, thornless varieties were specifically bred by horticulturists in the 20th century to make garden cultivation more accessible. They thrive in temperate climates with full sun and rich, well-drained soil. Today, they are a favorite in home gardens and commercial farms throughout North America and Europe, appreciated for their high yield and manageable growth habits.
+  </p>
+</div>
+
+<div class="panel" id="facts">
+  <p class="benefits-title">Did You Know?</p>
+  <p class="description-text">
+    Thornless blackberries are nutritional powerhouses, packed with vitamin C, fiber, and antioxidants. They are incredibly versatile in the kitchen, used for fresh snacking, baking into cobblers, or being preserved as jams and jellies. Beyond human consumption, their nectar-rich flowers are a vital food source for honeybees and bumblebees. Because they lack thorns, they are often used in "edible landscaping" where children and pets can safely interact with the plants.
+  </p>
+</div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+document.querySelectorAll('.thumb-slot').forEach(t => t.classList.remove('active'));
+
+
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.panel).classList.add('active');
+    });
+  });
+
+  function swapImage(thumbEl, newSrc) {
+	return;
+
+
+
+    document.getElementById('main-image-display').src = newSrc;
+    document.querySelectorAll('.thumb-slot').forEach(t => t.classList.remove('active'));
+    thumbEl.classList.add('active');
+  }
+</script>
+
+</body>
+</html>

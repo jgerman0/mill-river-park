@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Bird Collection Native Plants</title>
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans', sans-serif;
+  margin: 0;
+  background: #f5f3ee;
+}
+
+/* ── TOP BAR ─────────────────────────────────────────── */
+#top-bar {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 0 2.5rem;
+  height: 420px;
+  background-color: #1a1a18;
+  background-image: linear-gradient(rgba(0,0,0,0.48), rgba(0,0,0,0.48)),
+    url("https://media.audubon.org/social-media-photo/article/f_aud_apa-2018_northern-cardinal_a1-6922-1_kk_photo-douglas-chewning.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  color: #f7f5f0;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+
+#top-bar div.nav {
+  display: flex;
+  position: absolute;
+  top: 18%;
+  gap: 3.5rem;
+}
+
+#top-bar div.nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.15rem;
+  letter-spacing: 0.08em;
+  transition: color 0.2s;
+}
+#top-bar div.nav a:hover { color: #e8dfc8; }
+
+#top-bar .hero-title {
+  position: absolute;
+  top: 62%;
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+/* ── STICKY NAV ──────────────────────────────────────── */
+#sticky-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  height: 54px;
+  background: #255925;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.28);
+  transform: translateY(-100%);
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+#sticky-nav.visible {
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+#sticky-nav .sticky-brand {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+#sticky-nav .sticky-links {
+  display: flex;
+  gap: 2.5rem;
+}
+
+#sticky-nav .sticky-links a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  letter-spacing: 0.07em;
+  transition: color 0.2s;
+}
+#sticky-nav .sticky-links a:hover { color: #e8dfc8; }
+
+/* ── PAGE BODY ───────────────────────────────────────── */
+#page-body {
+  display: flex;
+  align-items: flex-start;
+  padding: 2.5rem 2.5rem 4rem;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ── FILTER SIDEBAR ──────────────────────────────────── */
+#filter-sidebar {
+  flex: 0 0 230px;
+  min-width: 200px;
+  background: #fff;
+  border: 1px solid #e0ddd5;
+  border-radius: 4px;
+  padding: 0 0 1rem;
+  font-size: 0.82rem;
+  position: sticky;
+  top: 1.5rem;
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto;
+}
+
+.filter-section {
+  border-bottom: 1px solid #e8e5dd;
+}
+.filter-section:last-child { border-bottom: none; }
+
+.filter-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #3a3a38;
+  background: #faf9f6;
+}
+.filter-section-header:hover { background: #f0ede5; }
+
+.filter-section-header .chevron {
+  font-size: 0.65rem;
+  transition: transform 0.2s;
+  color: #888;
+}
+.filter-section.collapsed .chevron { transform: rotate(-90deg); }
+
+.filter-section-body {
+  padding: 0.4rem 1rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+.filter-section.collapsed .filter-section-body { display: none; }
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.filter-row label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  color: #3a3a38;
+  font-size: 0.8rem;
+  flex: 1;
+}
+
+.filter-row input[type="checkbox"] {
+  accent-color: #2d7a4f;
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.filter-count {
+  color: #999;
+  font-size: 0.72rem;
+  min-width: 22px;
+  text-align: right;
+}
+
+/* Foliage color swatches */
+.swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── RESULTS AREA ────────────────────────────────────── */
+#results-area {
+  flex: 1;
+}
+
+#results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.4rem;
+}
+
+#results-header h2 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #555;
+  margin: 0;
+  letter-spacing: 0.03em;
+}
+
+#active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.filter-tag {
+  background: #e8f3ec;
+  color: #2d7a4f;
+  border: 1px solid #b8ddc8;
+  border-radius: 20px;
+  padding: 0.18rem 0.65rem;
+  font-size: 0.72rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 500;
+}
+.filter-tag .remove {
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+  color: #2d7a4f;
+}
+
+/* ── IMAGE GRID ──────────────────────────────────────── */
+#image-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.4rem;
+}
+
+.image-option {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.image-option-image-wrap {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 3px;
+  background: #e8e5dd;
+}
+
+.image-option-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.3s ease;
+}
+.image-option:hover .image-option-image { transform: scale(1.04); }
+
+.image-option p {
+  margin: 0.45rem 0 0;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #2a2a28;
+}
+
+.image-option.hidden { display: none; }
+
+/* ── CLEAR FILTERS BTN ───────────────────────────────── */
+#clear-all {
+  background: none;
+  border: none;
+  color: #2d7a4f;
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  display: none;
+}
+
+</style>
+</head>
+<body>
+
+<!-- ── STICKY NAV (appears on scroll) ── -->
+<nav id="sticky-nav">
+  <span class="sticky-brand">Mill River Park</span>
+  <div class="sticky-links">
+   <a href="homepage.html">Home</a>
+    <a href="pollinatorpage.html">Pollinators</a>
+    <a href="birdpage.html">Birds</a>
+    <a href="peoplepage.html">People</a>
+<a href="resources.html">Resources</a>
+  </div>
+</nav>
+
+<div id="top-bar">
+  <div class="nav">
+    <a href="homepage.html">Home</a>
+    <a href="pollinatorpage.html">Pollinators</a>
+    <a href="birdpage.html">Birds</a>
+    <a href="peoplepage.html">People</a>
+<a href="resources.html">Resources</a>
+  </div>
+  <p class="hero-title">Native Plants for Birds</p>
+</div>
+
+<div id="page-body">
+
+  <!-- ── FILTER SIDEBAR ── -->
+  <aside id="filter-sidebar">
+
+    <!-- Plant Type (renamed from Product Type; options updated) -->
+    <div class="filter-section" id="sec-type">
+      <div class="filter-section-header" onclick="toggleSection('sec-type')">
+        Plant Type <span class="chevron">▾</span>
+      </div>
+      <div class="filter-section-body">
+        <div class="filter-row"><label><input type="checkbox" data-filter="type" data-value="Tree"> Tree</label><span class="filter-count">6</span></div>
+        <div class="filter-row"><label><input type="checkbox" data-filter="type" data-value="Shrub"> Shrub</label><span class="filter-count">4</span></div>
+        <div class="filter-row"><label><input type="checkbox" data-filter="type" data-value="Herbaceous Perennial"> Herbaceous Perennial</label><span class="filter-count">2</span></div>
+        <div class="filter-row"><label><input type="checkbox" data-filter="type" data-value="Indigenous Garden Plants"> Indigenous Garden Plants</label><span class="filter-count">0</span></div>
+      </div>
+    </div>
+
+    <!-- Attracts Wildlife -->
+    <div class="filter-section" id="sec-wildlife">
+      <div class="filter-section-header" onclick="toggleSection('sec-wildlife')">
+        Attracts Wildlife <span class="chevron">▾</span>
+      </div>
+      <div class="filter-section-body">
+        <div class="filter-row"><label><input type="checkbox" data-filter="wildlife" data-value="Butterflies"> Butterflies</label><span class="filter-count">7</span></div>
+        <div class="filter-row"><label><input type="checkbox" data-filter="wildlife" data-value="Songbirds"> Songbirds</label><span class="filter-count">11</span></div>
+        <div class="filter-row"><label><input type="checkbox" data-filter="wildlife" data-value="Beneficial Insects"> Beneficial Insects</label><span class="filter-count">10</span></div>
+        <div class="filter-row"><label><input type="checkbox" data-filter="wildlife" data-value="Hummingbirds"> Hummingbirds</label><span class="filter-count">1</span></div>
+        <div class="filter-row"><label><input type="checkbox" data-filter="wildlife" data-value="Mammals"> Mammals</label><span class="filter-count">9</span></div>
+      </div>
+    </div>
+
+    <!-- Sun Exposure -->
+    <div class="filter-section" id="sec-sun">
+      <div class="filter-section-header" onclick="toggleSection('sec-sun')">
+        Sun Exposure <span class="chevron">▾</span>
+      </div>
+      <div class="filter-section-body">
+        <div class="filter-row"><label><input type="checkbox" data-filter="sun" data-value="Full Sun"> Full Sun</label><span class="filter-count">9</span></div>
+        <div class="filter-row"><label><input type="checkbox" data-filter="sun" data-value="Part Shade"> Part Shade</label><span class="filter-count">11</span></div>
+        <div class="filter-row"><label><input type="checkbox" data-filter="sun" data-value="Full Shade"> Full Shade</label><span class="filter-count">3</span></div>
+      </div>
+    </div>
+
+    <!-- Soil Moisture -->
+    <div class="filter-section" id="sec-soil">
+      <div class="filter-section-header" onclick="toggleSection('sec-soil')">
+        Soil Moisture <span class="chevron">▾</span>
+      </div>
+      <div class="filter-section-body">
+        <div class="filter-row"><label><input type="checkbox" data-filter="soil" data-value="Average"> Average</label><span class="filter-count">11</span></div>
+        <div class="filter-row"><label><input type="checkbox" data-filter="soil" data-value="Dry"> Dry</label><span class="filter-count">5</span></div>
+        <div class="filter-row"><label><input type="checkbox" data-filter="soil" data-value="Moist"> Moist</label><span class="filter-count">8</span></div>
+        <div class="filter-row"><label><input type="checkbox" data-filter="soil" data-value="Wet"> Wet</label><span class="filter-count">1</span></div>
+      </div>
+    </div>
+
+    <!-- Uses (options updated to Food Forest, Wildlife Habitat, Eco-Resilience) -->
+    <div class="filter-section" id="sec-uses">
+      <div class="filter-section-header" onclick="toggleSection('sec-uses')">
+        Uses <span class="chevron">▾</span>
+      </div>
+      <div class="filter-section-body">
+        <div class="filter-row"><label><input type="checkbox" data-filter="uses" data-value="Food Forest"> Food Forest</label><span class="filter-count">9</span></div>
+        <div class="filter-row"><label><input type="checkbox" data-filter="uses" data-value="Wildlife Habitat"> Wildlife Habitat</label><span class="filter-count">11</span></div>
+        <div class="filter-row"><label><input type="checkbox" data-filter="uses" data-value="Eco-Resilience"> Eco-Resilience</label><span class="filter-count">8</span></div>
+      </div>
+    </div>
+
+    <!-- Critter Resistance -->
+    <div class="filter-section" id="sec-critter">
+      <div class="filter-section-header" onclick="toggleSection('sec-critter')">
+        Critter Resistance <span class="chevron">▾</span>
+      </div>
+      <div class="filter-section-body">
+        <div class="filter-row"><label><input type="checkbox" data-filter="critter" data-value="Deer Resistant"> Deer Resistant</label><span class="filter-count">9</span></div>
+        <div class="filter-row"><label><input type="checkbox" data-filter="critter" data-value="Rabbit Resistant"> Rabbit Resistant</label><span class="filter-count">1</span></div>
+      </div>
+    </div>
+
+    <!-- Bloom Time -->
+    <div class="filter-section" id="sec-bloom">
+      <div class="filter-section-header" onclick="toggleSection('sec-bloom')">
+        Bloom Time <span class="chevron">▾</span>
+      </div>
+      <div class="filter-section-body">
+        <div class="filter-row"><label><input type="checkbox" data-filter="bloom" data-value="Spring"> Spring</label><span class="filter-count">8</span></div>
+        <div class="filter-row"><label><input type="checkbox" data-filter="bloom" data-value="Summer"> Summer</label><span class="filter-count">3</span></div>
+        <div class="filter-row"><label><input type="checkbox" data-filter="bloom" data-value="Fall"> Fall</label><span class="filter-count">1</span></div>
+      </div>
+    </div>
+
+    <!-- Harvest Time (NEW) -->
+    <div class="filter-section" id="sec-harvest">
+      <div class="filter-section-header" onclick="toggleSection('sec-harvest')">
+        Harvest Time <span class="chevron">▾</span>
+      </div>
+      <div class="filter-section-body">
+        <div class="filter-row"><label><input type="checkbox" data-filter="harvest" data-value="Spring"> Spring</label><span class="filter-count">2</span></div>
+        <div class="filter-row"><label><input type="checkbox" data-filter="harvest" data-value="Summer"> Summer</label><span class="filter-count">5</span></div>
+        <div class="filter-row"><label><input type="checkbox" data-filter="harvest" data-value="Fall"> Fall</label><span class="filter-count">5</span></div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ── RESULTS AREA ── -->
+  <main id="results-area">
+    <div id="results-header">
+      <h2 id="results-count">12 Plants</h2>
+      <div style="display:flex;align-items:center;gap:0.8rem;">
+        <div id="active-filters"></div>
+        <button id="clear-all" onclick="clearAllFilters()">Clear all</button>
+      </div>
+    </div>
+
+    <div id="image-list">
+
+      <!-- Hackberry -->
+      <a href="/example" class="image-option"
+         data-type="Tree"
+         data-wildlife="Songbirds,Beneficial Insects,Butterflies"
+         data-sun="Full Sun,Part Shade"
+         data-soil="Average,Dry"
+         data-uses="Wildlife Habitat,Eco-Resilience"
+         data-critter="Deer Resistant"
+         data-bloom="Spring"
+         data-harvest="Fall">
+        <div class="image-option-image-wrap">
+          <img class="image-option-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf3qzpWXPipl-CJoZpCOozvR-mtKjeCP_yGw&s">
+        </div>
+        <p>Hackberry</p>
+      </a>
+
+      <!-- Hickory -->
+      <a href="/example" class="image-option"
+         data-type="Tree"
+         data-wildlife="Songbirds,Mammals,Beneficial Insects"
+         data-sun="Full Sun,Part Shade"
+         data-soil="Average,Dry"
+         data-uses="Food Forest,Wildlife Habitat"
+         data-critter="Deer Resistant"
+         data-bloom="Spring"
+         data-harvest="Fall">
+        <div class="image-option-image-wrap">
+          <img class="image-option-image" src="https://abnativeplants.com/cdn/shop/products/Carya_ovata_CWikipedia1_540x.jpg?v=1671464090">
+        </div>
+        <p>Hickory</p>
+      </a>
+
+      <!-- Persimmon -->
+      <a href="/example" class="image-option"
+         data-type="Tree"
+         data-wildlife="Songbirds,Mammals"
+         data-sun="Full Sun,Part Shade"
+         data-soil="Average,Dry"
+         data-uses="Food Forest,Wildlife Habitat"
+         data-critter=""
+         data-bloom="Fall"
+         data-harvest="Fall">
+        <div class="image-option-image-wrap">
+          <img class="image-option-image" src="https://abnativeplants.com/cdn/shop/products/diosypros_virginiana_Cshutterstock_540x.jpg?v=1677470995">
+        </div>
+        <p>Persimmon</p>
+      </a>
+
+      <!-- Pawpaw -->
+      <a href="pawpaw.html" class="image-option"
+         data-type="Tree"
+         data-wildlife="Mammals,Butterflies,Songbirds"
+         data-sun="Part Shade,Full Shade"
+         data-soil="Average,Moist"
+         data-uses="Food Forest,Wildlife Habitat"
+         data-critter="Deer Resistant"
+         data-bloom="Spring"
+         data-harvest="Fall">
+        <div class="image-option-image-wrap">
+          <img class="image-option-image" src="https://abnativeplants.com/cdn/shop/products/asimina_triloba_denise_540x.jpg?v=1740079823">
+        </div>
+        <p>Pawpaw</p>
+      </a>
+
+      <!-- Thornless Blackberry -->
+      <a href="thornlessblackberry.html" class="image-option"
+         data-type="Shrub"
+         data-wildlife="Songbirds,Beneficial Insects,Mammals"
+         data-sun="Full Sun"
+         data-soil="Average,Moist"
+         data-uses="Food Forest,Wildlife Habitat"
+         data-critter="Deer Resistant"
+         data-bloom="Summer"
+         data-harvest="Summer">
+        <div class="image-option-image-wrap">
+          <img class="image-option-image" src="https://www.starkbros.com/images/dynamic/7584.jpg">
+        </div>
+        <p>Thornless Blackberry</p>
+      </a>
+
+      <!-- Solomon's Seal -->
+      <a href="/example" class="image-option"
+         data-type="Herbaceous Perennial"
+         data-wildlife="Hummingbirds,Beneficial Insects,Songbirds"
+         data-sun="Part Shade,Full Shade"
+         data-soil="Moist,Average"
+         data-uses="Wildlife Habitat,Eco-Resilience"
+         data-critter="Deer Resistant,Rabbit Resistant"
+         data-bloom="Spring"
+         data-harvest="Summer">
+        <div class="image-option-image-wrap">
+          <img class="image-option-image" src="https://abnativeplants.com/cdn/shop/files/Polygonatum_biflorum_var._commutatum_CAdobeStock_434832735_540x.jpg?v=1743452564">
+        </div>
+        <p>Solomon's Seal</p>
+      </a>
+
+      <!-- Ostrich Fern -->
+      <a href="/example" class="image-option"
+         data-type="Herbaceous Perennial"
+         data-wildlife="Beneficial Insects,Mammals"
+         data-sun="Part Shade,Full Shade"
+         data-soil="Moist,Wet"
+         data-uses="Food Forest,Eco-Resilience"
+         data-critter="Deer Resistant"
+         data-bloom="Spring"
+         data-harvest="Spring">
+        <div class="image-option-image-wrap">
+          <img class="image-option-image" src="https://abnativeplants.com/cdn/shop/products/Mattuciea_struthiopteris2_540x.jpg?v=1649440642">
+        </div>
+        <p>Ostrich Fern</p>
+      </a>
+
+      <!-- American Plum -->
+      <a href="americanplum.html" class="image-option"
+         data-type="Tree"
+         data-wildlife="Songbirds,Beneficial Insects,Butterflies,Mammals"
+         data-sun="Full Sun,Part Shade"
+         data-soil="Average,Dry"
+         data-uses="Food Forest,Wildlife Habitat,Eco-Resilience"
+         data-critter="Deer Resistant"
+         data-bloom="Spring"
+         data-harvest="Summer">
+        <div class="image-option-image-wrap">
+          <img class="image-option-image" src="https://abnativeplants.com/cdn/shop/files/Prunus_maritima_CAdobeStock_180551319_540x.jpg?v=1743441386">
+        </div>
+        <p>American Plum</p>
+      </a>
+
+      <!-- Elderberry -->
+      <a href="/example" class="image-option"
+         data-type="Shrub"
+         data-wildlife="Songbirds,Beneficial Insects,Butterflies,Mammals"
+         data-sun="Full Sun,Part Shade"
+         data-soil="Average,Moist"
+         data-uses="Food Forest,Wildlife Habitat,Eco-Resilience"
+         data-critter=""
+         data-bloom="Summer"
+         data-harvest="Summer">
+        <div class="image-option-image-wrap">
+          <img class="image-option-image" src="https://abnativeplants.com/cdn/shop/products/DETA-300_540x.jpg?v=1555701919">
+        </div>
+        <p>Elderberry</p>
+      </a>
+
+      <!-- Blueberry -->
+      <a href="/example" class="image-option"
+         data-type="Shrub"
+         data-wildlife="Songbirds,Beneficial Insects,Butterflies,Mammals"
+         data-sun="Full Sun,Part Shade"
+         data-soil="Average,Dry,Moist"
+         data-uses="Food Forest,Wildlife Habitat,Eco-Resilience"
+         data-critter="Deer Resistant"
+         data-bloom="Summer"
+         data-harvest="Summer">
+        <div class="image-option-image-wrap">
+          <img class="image-option-image" src="https://freerangestock.com/sample/90309/blueberries-growing-on-a-tree.jpg">
+        </div>
+        <p>Blueberry</p>
+      </a>
+
+      <!-- Hazelnut -->
+      <a href="/example" class="image-option"
+         data-type="Shrub"
+         data-wildlife="Songbirds,Beneficial Insects,Mammals,Butterflies"
+         data-sun="Full Sun,Part Shade"
+         data-soil="Average,Moist"
+         data-uses="Food Forest,Wildlife Habitat,Eco-Resilience"
+         data-critter="Deer Resistant"
+         data-bloom="Spring"
+         data-harvest="Fall">
+        <div class="image-option-image-wrap">
+          <img class="image-option-image" src="https://abnativeplants.com/cdn/shop/products/corylus_little_frilly_ars10_540x.jpg?v=1758902886">
+        </div>
+        <p>Hazelnut</p>
+      </a>
+
+      <!-- Sugar Maple -->
+      <a href="/example" class="image-option"
+         data-type="Tree"
+         data-wildlife="Beneficial Insects,Butterflies,Songbirds"
+         data-sun="Full Sun,Part Shade"
+         data-soil="Average,Moist"
+         data-uses="Wildlife Habitat,Eco-Resilience"
+         data-critter=""
+         data-bloom="Spring"
+         data-harvest="Spring">
+        <div class="image-option-image-wrap">
+          <img class="image-option-image" src="https://abnativeplants.com/cdn/shop/products/acer_saccharum_Cbailey_540x.jpg?v=1669644890">
+        </div>
+        <p>Sugar Maple</p>
+      </a>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  const activeFilters = {};
+
+  function toggleSection(id) {
+    document.getElementById(id).classList.toggle('collapsed');
+  }
+
+  function getCheckedFilters() {
+    const groups = {};
+    document.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+      const key = cb.dataset.filter;
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(cb.dataset.value);
+    });
+    return groups;
+  }
+
+  function applyFilters() {
+    const groups = getCheckedFilters();
+    const cards = document.querySelectorAll('.image-option');
+    let visible = 0;
+
+    cards.forEach(card => {
+      let match = true;
+      for (const [key, values] of Object.entries(groups)) {
+        const cardVals = (card.dataset[key] || '').split(',').map(s => s.trim());
+        const hasAny = values.some(v => cardVals.includes(v));
+        if (!hasAny) { match = false; break; }
+      }
+      card.classList.toggle('hidden', !match);
+      if (match) visible++;
+    });
+
+    document.getElementById('results-count').textContent = `${visible} Plant${visible !== 1 ? 's' : ''}`;
+    renderTags(groups);
+    document.getElementById('clear-all').style.display = Object.keys(groups).length ? 'inline' : 'none';
+  }
+
+  function renderTags(groups) {
+    const container = document.getElementById('active-filters');
+    container.innerHTML = '';
+    for (const [key, values] of Object.entries(groups)) {
+      values.forEach(val => {
+        const tag = document.createElement('span');
+        tag.className = 'filter-tag';
+        tag.innerHTML = `${val} <span class="remove" data-filter="${key}" data-value="${val}">×</span>`;
+        container.appendChild(tag);
+      });
+    }
+
+    container.querySelectorAll('.remove').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cb = document.querySelector(
+          `input[data-filter="${btn.dataset.filter}"][data-value="${btn.dataset.value}"]`
+        );
+        if (cb) { cb.checked = false; applyFilters(); }
+      });
+    });
+  }
+
+  function clearAllFilters() {
+    document.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => cb.checked = false);
+    applyFilters();
+  }
+
+  document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', applyFilters);
+  });
+</script>
+
+<script>
+  const stickyNav = document.getElementById('sticky-nav');
+  const topBar = document.getElementById('top-bar');
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      stickyNav.classList.toggle('visible', !entry.isIntersecting);
+    },
+    { threshold: 0, rootMargin: '0px' }
+  );
+  observer.observe(topBar);
+</script>
+
+</body>
+</html>

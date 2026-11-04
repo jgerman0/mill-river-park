@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mill River Park — Native Plants</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+  :root {
+    --forest: #1e3a28;
+    --moss: #3d6142;
+    --fern: #5a8a5e;
+    --sage: #8fad7f;
+    --meadow: #b8cc9a;
+    --cream: #f5f0e8;
+    --parchment: #ede5d4;
+    --stone: #8a8070;
+    --gold: #c8a84b;
+    --white: #fdfaf5;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Noto Sans', sans-serif; background: #f5f3ee; overflow-x: hidden; }
+
+/* ── STICKY NAV (Restored) ───────────────────────────── */
+#sticky-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 54px;
+  background: #255925; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.28);
+  transform: translateY(-100%); transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+#sticky-nav.visible { transform: translateY(0); }
+#sticky-nav .sticky-brand { font-size: 0.95rem; font-weight: 700; color: #ffffff; letter-spacing: 0.06em; }
+#sticky-nav .sticky-links { display: flex; gap: 2.5rem; }
+#sticky-nav .sticky-links a { color: #ffffff; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+#sticky-nav .sticky-links a:hover { color: #e8dfc8; }
+
+/* ── TOP BAR ─────────────────────────────────────────── */
+#top-bar {
+  position: relative; display: flex; justify-content: center; height: 720px;
+  background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
+              url("https://i.postimg.cc/DzLcf0LQ/Mill-River-Park-Stamford.jpg") center/cover no-repeat;
+  color: #f7f5f0; box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+#top-bar .nav { position: absolute; top: 18%; display: flex; gap: 3.5rem; }
+#top-bar .nav a { color: white; text-decoration: none; font-size: 1.15rem; letter-spacing: 0.08em; }
+#top-bar .hero-title { position: absolute; top: 50%; font-size: 3.2rem; font-weight: 700; }
+
+/* ─── SHARED LAYOUT ─── */
+section { padding: 6rem 3rem; width: 100%; }
+.container-inner { max-width: 1300px; margin: 0 auto; }
+.section-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--moss); margin-bottom: 0.8rem; display: block; }
+.section-title { font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 700; color: var(--forest); margin-bottom: 1.2rem; }
+.section-body { font-size: 1.2rem; color: var(--stone); line-height: 1.75; }
+
+/* ─── INTRO STRIP ─── */
+.intro-strip { background: var(--parchment); padding: 3rem; display: flex; align-items: center; justify-content: center; gap: 5rem; flex-wrap: wrap; border-block: 3px solid var(--meadow); }
+.intro-stat { text-align: center; }
+.intro-stat .num { font-size: 3rem; font-weight: 800; color: var(--moss); display: block; }
+.intro-stat .lbl { font-size: 0.72rem; text-transform: uppercase; color: var(--stone); }
+.intro-divider { width: 1px; height: 60px; background: var(--meadow); opacity: 0.4; }
+
+/* ─── PHOTO GALLERY ─── */
+.photo-gallery-section { padding: 5rem 3rem; background: var(--white); }
+.photo-masonry {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.photo-item { border-radius: 8px; overflow: hidden; position: relative; height: 300px; }
+.photo-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+.photo-item:hover img { transform: scale(1.04); }
+.photo-item.tall { grid-row: span 2; height: 620px; }
+.photo-item.wide { grid-column: span 2; }
+.photo-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(30,58,40,0.75), transparent); opacity: 0; transition: opacity 0.3s; display: flex; align-items: flex-end; padding: 1.2rem; color: var(--white); font-style: italic; }
+.photo-item:hover .photo-overlay { opacity: 1; }
+
+/* ─── MAP DOWNLOAD (FULL WIDTH BG) ─── */
+.map-download-banner {
+  background: linear-gradient(135deg, var(--forest) 0%, #162e1e 60%, #0f2218 100%);
+  padding: 4rem 3rem; position: relative; width: 100%;
+}
+.map-download-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+.btn-map-download { display: inline-flex; align-items: center; padding: 1rem 2rem; background: var(--gold); color: var(--forest); text-decoration: none; border-radius: 3px; font-weight: 500; text-transform: uppercase; font-size: 0.82rem; }
+
+/* ─── NATIVE PLANTS (FULL WIDTH BG) ─── */
+#categories { background: var(--white); width: 100%; }
+.categories-header { text-align: center; margin-bottom: 4rem; }
+.categories-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+.category-card { background: var(--cream); border-radius: 8px; overflow: hidden; border: 1px solid rgba(143,173,127,0.2); transition: transform 0.3s; }
+.category-card:hover { transform: translateY(-6px); }
+.card-visual { height: 320px; overflow: hidden; }
+.card-visual img { width: 100%; height: 100%; object-fit: cover; }
+.card-body { padding: 1rem; }
+
+/* ─── VISIT SECTION (FULL WIDTH BG) ─── */
+.visit-section { background: var(--white); width: 100%; }
+.visit-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 5rem; align-items: center; }
+.info-card { padding: 1.4rem 1.5rem; background: var(--parchment); border-radius: 8px; margin-bottom: 1rem; }
+.map-visual { background: linear-gradient(145deg, #c8ddb8, #5a8a5e); height: 380px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+
+
+
+#map-section-title {
+
+color: white;
+}
+
+
+a {
+  text-decoration: none; /* Removes the underline */
+  color: inherit;        /* Makes the text take the color of its parent (usually black) */
+}
+
+
+.newsletter { background: linear-gradient(135deg, var(--forest) 0%, #0d2215 100%); padding: 1rem 3rem; display: flex;
+  justify-content: center;
+  align-items: center;}
+ 
+  .newsletter p {  font-size: 0.9rem; color: rgba(245,240,232,0.7);   }
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+@media (max-width: 1024px) {
+  .categories-grid, .visit-grid, .map-download-inner { grid-template-columns: 1fr; }
+  .photo-masonry { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<nav id="sticky-nav">
+  <span class="sticky-brand">Mill River Park</span>
+  <div class="sticky-links">
+    <a href="homepage.html">Home</a>
+    <a href="pollinatorpage.html">Pollinators</a>
+    <a href="birdpage.html">Birds</a>
+    <a href="peoplepage.html">People</a>
+    <a href="resources.html">Resources</a>
+  </div>
+</nav>
+
+<div id="top-bar">
+  <div class="nav">
+   <a href="homepage.html">Home</a>
+    <a href="pollinatorpage.html">Pollinators</a>
+    <a href="birdpage.html">Birds</a>
+    <a href="peoplepage.html">People</a>
+    <a href="resources.html">Resources</a>
+
+  </div>
+  <p class="hero-title">Mill River Park</p>
+</div>
+
+<br>
+
+<div class="photo-gallery-section">
+  <div class="container-inner">
+    <div class="categories-header">
+      <span class="section-label">Life in the Park</span>
+      <h2 class="section-title">A Sanctuary Through Every Season</h2>
+    </div>
+    <div class="photo-masonry">
+      <div class="photo-item tall"><img src="https://i.postimg.cc/FFpT8j61/1920x0.jpg"><div class="photo-overlay">Woodland Canopy</div></div>
+      <div class="photo-item"><img src="https://i.postimg.cc/K8GxFrGP/24f2d8a4e1a0a3ae2e5b94d32f017669.jpg"><div class="photo-overlay">Coneflower Meadow</div></div>
+      <div class="photo-item"><img src="https://i.postimg.cc/hvYPhX2c/637463026045270000-(1).jpg"><div class="photo-overlay">River Wetland</div></div>
+      <div class="photo-item wide"><img src="https://i.postimg.cc/kXN9Sv9q/0506Mill-River-231-pc.webp"><div class="photo-overlay">Wide Park View</div></div>
+    </div>
+  </div>
+</div>
+<br>
+
+<section class="map-download-banner">
+  <div class="container-inner map-download-inner">
+    <div class="map-download-text">
+      <span class="section-label" id = "map-section-title">Explore</span>
+      <h2 class="section-title" style="color:white;">Download the Trail Map</h2>
+      <p style="color: rgba(255,255,255,0.7); margin-bottom: 2rem;">Navigate our 30 acres of restored habitat with ease.</p>
+      <a href="#" class="btn-map-download">Download PDF</a>
+    </div>
+    <div class="map-visual">Map Preview goes here</div>
+  </div>
+</section>
+
+<br>
+<section id="categories">
+  <div class="container-inner">
+    <div class="categories-header">
+      <span class="section-label">Our Collections</span>
+      <h2 class="section-title">Search Native Plants</h2>
+      <p class="section-body" style="margin: 0 auto;">Find out the many native plants vital for a healthy ecosystem.</p>
+    </div>
+    <div class="categories-grid">
+     <a href = "birdpage.html">
+      <div class="category-card">
+        <div class="card-visual"><img src="https://i.postimg.cc/kXYrWrNp/gruendercoach-bird-7967356.jpg"></div>
+        <div class="card-body">
+          <h3 class="card-title">Plants for Birds</h3>
+          <p class="section-body" style="font-size: 0.95rem;">Trees and shrubs that provide nesting habitat.</p>
+        </div>
+      </div>
+
+	</a>
+	<a href = "pollinatorpage.html">
+      <div class="category-card">
+        <div class="card-visual"><img src="https://i.postimg.cc/QCNPWSH2/ahep317-honeybee-9150104.jpg"></div>
+        <div class="card-body">
+          <h3 class="card-title">Plants for Pollinators</h3>
+          <p class="section-body" style="font-size: 0.95rem;">Nectar-rich blooms for bees and butterflies.</p>
+        </div>
+      </div>
+</a>
+	<a href = "peoplepage.html">
+      <div class="category-card">
+        <div class="card-visual"><img src="https://i.postimg.cc/pXsG3mJm/wild-plum-fruit-fruits-food-drink-4e2f4f-1024.jpg"></div>
+        <div class="card-body">
+          <h3 class="card-title">Plants for People</h3>
+          <p class="section-body" style="font-size: 0.95rem;">Perfect for cooking and integrating to your daily life.</p>
+        </div>
+      </div>
+
+	</a>
+    </div>
+  </div>
+</section>
+
+ 
+
+
+<br>
+<section class="visit-section">
+  <div class="container-inner visit-grid">
+    <div>
+      <span class="section-label">Plan Your Trip</span>
+      <h2 class="section-title">Visit Mill River Park</h2>
+      <div class="info-card"><span class="section-label" style="font-size:0.6rem">Location</span><p>West Broad St, Stamford, CT</p></div>
+      <div class="info-card"><span class="section-label" style="font-size:0.6rem">Hours</span><p>Dawn to Dusk, Daily</p></div>
+    </div>
+    <div class="map-visual">Interactive Map Placeholder</div>
+  </div>
+</section>
+
+<div class="newsletter">
+ 
+  <p>© 2026 Mill River Park. All rights reserved.</p>
+   
+</div>
+
+
+<script>
+  // Script to handle sticky nav appearance
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('sticky-nav');
+    if (window.scrollY > 400) {
+      nav.classList.add('visible');
+    } else {
+      nav.classList.remove('visible');
+    }
+  });
+</script>
+
+</body>
+</html>
